@@ -70,6 +70,7 @@ span.total-votes {
     -webkit-filter: none;
        -moz-filter: none;
             filter: none;
+			
 }
 .drinkcard-cc{
 	    cursor:pointer;
@@ -82,11 +83,12 @@ span.total-votes {
     -webkit-transition: all 100ms ease-in;
        -moz-transition: all 100ms ease-in;
             transition: all 100ms ease-in;
-    -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
-       -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
-            filter: brightness(1.8) grayscale(1) opacity(.7);
+    -webkit-filter: brightness(1.5) grayscale(1) opacity(.8);
+       -moz-filter: brightness(1.5) grayscale(1) opacity(.8);
+            filter: brightness(1.5) grayscale(1) opacity(.8);
 }
 .drinkcard-cc:hover{
+	bottom:15px;
     -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
        -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
             filter: brightness(1.2) grayscale(.5) opacity(.9);
@@ -166,6 +168,32 @@ span.total-votes {
 	background-color:transparent;
 }
 .copyButton:active {
+	position:relative;
+	top:1px;
+}
+.mainButton {
+	-moz-box-shadow:inset 0px 2px 0px 0px #ffffff;
+	-webkit-box-shadow:inset 0px 2px 0px 0px #1c9ad6;
+	box-shadow:inset 0px 2px 0px 0px #1c9ad6;
+	background-color:transparent;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:2px solid #dcdcdc;
+	display:inline-block;
+	cursor:pointer;
+	color:#1c9ad6;
+	font-family:Trebuchet MS;
+	font-size:13px;
+	font-weight:bold;
+	padding:25px 42px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ffffff;
+}
+.mainButton:hover {
+	background-color:transparent;
+}
+.mainButton:active {
 	position:relative;
 	top:1px;
 }
