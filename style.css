@@ -1,0 +1,171 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+ margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+	background-image: url(./geometry.png);
+	
+}
+
+h6 {
+	font-size: 1.4em;
+	margin-bottom: 15px;
+}
+
+a { color: white; }
+
+ul { list-style: none; margin-bottom: 15px;}
+
+.results-bar {
+	padding: 10px;
+	color: white;
+	background: url(images/result-bar-bg.png) left center;
+	white-space: nowrap;
+}
+
+span.total-votes {
+	font-size: 2.6em;
+	
+}
+.card-selector input{
+	position: absolute;
+	left: -9999px;
+	visibility: hidden;
+}
+
+.one{
+	background-image: url(./card-template1.png);
+}
+.two{
+	background-image: url(./card-template2.png);
+}
+.three{
+	background-image: url(./card-template3.png);
+}
+.five{
+	background-image: url(./card-template5.png);
+}
+.eight{
+	background-image: url(./card-template8.png);
+}
+.thirteen{
+	background-image: url(./card-template13.png);
+}
+.twenty{
+	background-image: url(./card-template20.png);
+}
+.inf{
+	background-image: url(./card-templateINF.png);
+}
+.coffee{
+	background-image: url(./card-templateCUP.png);
+}
+
+.card-selector input:active +.drinkcard-cc{opacity: .9;}
+.card-selector input:checked +.drinkcard-cc{
+    -webkit-filter: none;
+       -moz-filter: none;
+            filter: none;
+}
+.drinkcard-cc{
+	    cursor:pointer;
+		position: relative;
+    background-size: contain;
+    background-repeat:no-repeat;
+	display: inline;
+    
+	padding:65px;
+    -webkit-transition: all 100ms ease-in;
+       -moz-transition: all 100ms ease-in;
+            transition: all 100ms ease-in;
+    -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+       -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+            filter: brightness(1.8) grayscale(1) opacity(.7);
+}
+.drinkcard-cc:hover{
+    -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+       -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+            filter: brightness(1.2) grayscale(.5) opacity(.9);
+}
+.myButton {
+	-moz-box-shadow:inset 0px 2px 0px 0px #ffffff;
+	-webkit-box-shadow:inset 0px 2px 0px 0px #ffffff;
+	box-shadow:inset 0px 2px 0px 0px #ffffff;
+	background-color:transparent;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	cursor:pointer;
+	color:#666666;
+	font-family:Trebuchet MS;
+	font-size:13px;
+	font-weight:bold;
+	padding:6px 38px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ffffff;
+}
+.myButton:hover {
+	background-color:transparent;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
+.Startbutton {
+	-moz-box-shadow:inset 0px 2px 0px 0px #ffffff;
+	-webkit-box-shadow:inset 0px 2px 0px 0px #ffffff;
+	box-shadow:inset 0px 2px 0px 0px #ffffff;
+	background-color:transparent;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	cursor:pointer;
+	color:#666666;
+	font-family:Trebuchet MS;
+	font-size:13px;
+	font-weight:bold;
+	padding:6px 38px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ffffff;
+}
+.startButton:hover {
+	background-color:transparent;
+}
+.startButton:active {
+	position:relative;
+	top:1px;
+}
+.copyButton {
+	-moz-box-shadow:inset 0px 2px 0px 0px #ffffff;
+	-webkit-box-shadow:inset 0px 2px 0px 0px #ffffff;
+	box-shadow:inset 0px 2px 0px 0px #ffffff;
+	background-color:transparent;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	cursor:pointer;
+	color:#666666;
+	font-family:Trebuchet MS;
+	font-size:13px;
+	font-weight:bold;
+	padding:1px 9px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ffffff;
+}
+.copyButton:hover {
+	background-color:transparent;
+}
+.copyButton:active {
+	position:relative;
+	top:1px;
+}
