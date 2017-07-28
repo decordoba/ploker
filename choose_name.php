@@ -1,6 +1,7 @@
 <?php require_once('Connections/conn_vote.php'); ?>
 <?php require_once('basic_functions.php'); ?>
 <?php
+
 session_start();
 
 $room = "";
@@ -54,22 +55,27 @@ else
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Poll</title>
+<title>Ploker</title>
 <link href="style.css" rel="stylesheet" type="text/css" />
 <script src="js/jquery-latest.min.js" type="text/javascript"></script>
 <link rel="icon" type="image/ico" href="favicon.ico">
 </head>
 
 <body>
+	<div  class="brightness" style="margin-top: 30px;" align=center><a href="./index.html"><img src="./logo.png" width="264" height="82" alt="" /></a></div>
+	<div style="margin-top: 100px;" align=center>
 	<form method="POST">
-		<div>
-			<label>Name</label>
-			<input type="text" name="user_name" placeholder="John Smith" value=<?php Print($user_name); ?>>
+		<div style="color: #1c9ad6">
+			<label>Name:</label>
+			<input type="text" name="user_name" class="textButton" placeholder="John Smith" value=<?php Print($user_name); ?>>
 		</div>
-		<div>
-			<label>Room</label>
-			<input type="number" name="room" placeholder="00000" value=<?php Print($room); ?>>
+		<div style="color: #1c9ad6; margin-top: 30px;">
+			<label>Room:</label>
+			<input type="number" name="room" class="textButton" placeholder="00000" value=<?php Print($room); ?>>
 		</div>
-		<input type="submit" value="Join Room" name="join_room">
+		<div style="margin-top: 30px;">
+			<input type="submit" name="join_room" value="JOIN ROOM" class="myButton"></div>
+		</div>
 	</form>
+	</div>
 </body>
