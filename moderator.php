@@ -35,6 +35,7 @@ if (!isset($_SESSION['moderator_room'])) {
 	<script>
 		console.log('Table name:', "<?php Print($table_name); ?>");
 		var connected_users = [];
+		var users_with_answer = [];
 		var current_state = "";
 		var choices = ["ONE (1)", "TWO (2)", "THREE (3)", "FIVE (5)", "EIGHT (8)", "THIRTEEN (13)", "TWENTY (20)", "COFFEE", "ENDLESS"];
 	
@@ -52,6 +53,7 @@ if (!isset($_SESSION['moderator_room'])) {
 			});
 			
 			var checkUsersInterval = window.setInterval(myCallback, 1000);
+			var checkAnswersInterval = window.setInterval(answersCallback, 1000);
 			
 			function stateMachine(state) {
 				switch(state) {
@@ -63,19 +65,42 @@ if (!isset($_SESSION['moderator_room'])) {
 						document.getElementById("barchart").style.display = "none";
 						document.getElementById("button_vote").style.display = "none";
 						document.getElementById("button_statistics").style.display = "block";
+						if (state != current_state) {
+							users_with_answer = [];
+						}
 						break;
 					case "2":
 						console.log("State 2");
 						document.getElementById("barchart").style.display = "block";
 						document.getElementById("button_vote").style.display = "block";
 						document.getElementById("button_statistics").style.display = "none";
-						graphCallback();
+						if (state != current_state) {
+							graphCallback();
+						}
 						break;
 				}
+				current_state = state;
+			}
+			
+			function answersCallback() {
+				var ajaxurl = 'get_results.php';
+				data =  {'table_name': <?php Print($table_name); ?>};
+				$.post(ajaxurl, data, function (responseText) {
+					console.log("Data:", data);
+					console.log("Response:", responseText);
+					response = JSON.parse(responseText);
+					var tmp_users_with_answer = [];
+					for (var i=0; i<response.length; i++) {
+						if (response[i]["user_name"] == "Settings") {
+							continue;
+						}
+						tmp_users_with_answer.push(response[i]["user_name"]);
+					}
+					users_with_answer = tmp_users_with_answer;
+				});
 			}
 			
 			function graphCallback() {
-				console.log("hello");
 				var ajaxurl = 'get_results.php';
 				data =  {'table_name': <?php Print($table_name); ?>};
 				$.post(ajaxurl, data, function (responseText) {
@@ -172,10 +197,24 @@ if (!isset($_SESSION['moderator_room'])) {
 							if (response[i]["user_name"] == "Settings") {
 								continue;
 							}
-							tmp_connected_users.push(response[i]["user_name"]);
+							var user = response[i]["user_name"];
+							if (users_with_answer.indexOf(user) != -1) {
+								user = "<button class='btn btn-success' type='button'>" + user + "</button>";
+							}
+							else
+							{
+								user = "<button class='btn btn-default' type='button'>" + user + "</button>";
+							}
+							tmp_connected_users.push(user);
 						}
 						connected_users = tmp_connected_users;
-						document.getElementById("participantlist").value = "- " + connected_users.join("\r\n- ");
+						if (connected_users.length > 0) {
+							document.getElementById("participantlist").innerHTML = connected_users.join("");
+							console.log(connected_users.join(""));
+						}
+						else {
+							document.getElementById("participantlist").innerHTML = "<button class='btn btn-default' type='button'>" + "</button>";
+						}
 					}
 				};
 				xhttp.open("POST", "get_users.php", true);
@@ -205,21 +244,23 @@ if (!isset($_SESSION['moderator_room'])) {
 		</div>
 		<label id="copyTarget" name="copyTarget" type="text" />
 		<div  class="textButton" style="margin-top: 60px; color: #1c9ad6">
-		Participant list:
+			Participant list:
 		</div>
-		<div style="margin-top: 10px;">
-	  <textarea style="overflow:auto;resize:none" id="participantlist" name="participantlist" width="500px" cols="auto"></textarea>
+		</label>
+		<br>
+		<!--<textarea style="overflow:auto;resize:none" id="participantlist" name="participantlist" width="500px" cols="auto"></textarea>-->
+		<div class="btn-group-vertical" role="group" style="margin-top: 10px;" id="participantlist">
+		</div>
+		<br>
+		<br>
+		<div align=center id="button_vote" style="display: block">
+			<input class="button Startbutton" type="submit" name="start" value="START POLL" />
+		</div>
+		<div align=center id="button_statistics" style="display: none">
+			<input class="button Startbutton" type="submit" name="stop" value="SHOW RESULTS" />
+		</div>
+		<div align=center id="barchart" style="display: none">
+			<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+		</div>
 	</div>
-	<br>
-	<div align=center id="button_vote" style="display: block">
-		<input class="button Startbutton" type="submit" name="start" value="START POLL" />
-	</div>
-	<div align=center id="button_statistics" style="display: none">
-		<input class="button Startbutton" type="submit" name="stop" value="SHOW RESULTS" />
-	</div>
-	<div align=center id="barchart" style="display: none">
-		<div id="chartContainer" style="height: 300px; width: 100%;"></div>
-	</div>
-	</div>
-	
 </body>
