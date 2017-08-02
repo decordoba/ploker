@@ -3,8 +3,7 @@
 <?php
 if (isset($_POST['table_name'])) {
 	$table_name = GetSQLValueString($_POST['table_name'], "int");
-	$users = UpdateUsers($conn_vote, $table_name);
-	//$users = GetUsers($conn_vote, $table_name);
-	echo json_encode($users);
+	$user_name = GetSQLValueString($_POST['user_name'], "string");
+	UpdateLastConnection($user_name, $conn_vote, $table_name);
 }
 ?>

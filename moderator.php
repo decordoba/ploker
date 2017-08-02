@@ -213,7 +213,7 @@ if (!isset($_SESSION['moderator_room'])) {
 							console.log(connected_users.join(""));
 						}
 						else {
-							document.getElementById("participantlist").innerHTML = "<button class='btn btn-default' type='button'>" + "</button>";
+							document.getElementById("participantlist").innerHTML = "<button class='btn btn-info' type='button'>" + "Waiting for guests..." + "</button>";
 						}
 					}
 				};
@@ -237,7 +237,7 @@ if (!isset($_SESSION['moderator_room'])) {
 				<button type="button" class="btn btn-default"><b><?php echo $table_name; ?></b></button>
 			</div>
 			<div class="btn-group" role="group">
-				<button class="btn btnclip btn-warning" data-clipboard-text="http://10.11.169.188/ploker/choose_name.php?room=<?php Print($table_name); ?>">
+				<button class="btn btnclip btn-warning" data-clipboard-text="http://<?php echo "10.11.169.188"; //GetClientIP(); ?>/ploker/choose_name.php?room=<?php Print($table_name); ?>">
 					Link to clipboard
 				</button>
 		    </div>
@@ -259,8 +259,8 @@ if (!isset($_SESSION['moderator_room'])) {
 		<div align=center id="button_statistics" style="display: none">
 			<input class="button Startbutton" type="submit" name="stop" value="SHOW RESULTS" />
 		</div>
-		<div align=center id="barchart" style="display: none">
-			<div id="chartContainer" style="height: 300px; width: 100%;"></div>
-		</div>
+	</div>
+	<div align=center id="barchart" style="display: none">
+		<div id="chartContainer" style="height: 300px; width: 100%;"></div>
 	</div>
 </body>

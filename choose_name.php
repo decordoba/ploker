@@ -41,6 +41,10 @@ if (isset($_POST['join_room'])) {
 		if (TableExists($conn_vote, $room) && !UserExists($user_name, $conn_vote, $room)) {
 			WriteRowUsers($user_name, $conn_vote, $room);
 			header('Location: guest.php');
+		} else {
+			echo "<h1>";
+			echo json_encode(GetUsers($conn_vote, $room));
+			echo "</h1>";
 		}
 	}
 }

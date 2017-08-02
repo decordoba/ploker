@@ -58,12 +58,34 @@ if (!function_exists("StartStopVoting")) {
 		return mysql_query($query_start_voting, $conn_vote) or die(mysql_error());
 	}
 }
+if (!function_exists("updateUsers")) {
+	function updateUsers($conn_vote, $table_name) {
+		$query_select = "SELECT `user_name`, `last_connection`, NOW() FROM `{$table_name}_users`";
+		$users = mysql_query($query_select, $conn_vote) or die(mysql_error());
+		$array = array();
+		while($user = mysql_fetch_assoc($users)) {
+			if ($user["user_name"] == "Settings")
+				continue;
+			$now = strtotime($user["NOW()"]);
+			$last = strtotime($user["last_connection"]);
+			if ($now - $last > 30) {
+				$query_remove_user = "DELETE FROM `{$table_name}_users` WHERE `user_name` = '{$user["user_name"]}'";
+				mysql_query($query_remove_user, $conn_vote) or die(mysql_error());
+			} else {
+				$array[] = $user;
+			}
+		}
+		return $array;
+	}
+}
+
 if (!function_exists("createTableUsers")) {
 	function createTableUsers($conn_vote, $table_name)
 	{
 		$query_create_table = "CREATE TABLE `{$table_name}` (
 							   `user_name` varchar(200) default  NULL,
-							   `join_date` date NOT NULL
+							   `join_date` datetime NOT NULL,
+							   `last_connection` datetime NOT NULL
 							   )";
 		return mysql_query($query_create_table, $conn_vote) or die(mysql_error());
 	}
@@ -110,6 +132,14 @@ if (!function_exists("UpdateVote")) {
 		return mysql_query($query_update, $conn_vote) or die(mysql_error());
 	}
 }
+if (!function_exists("UpdateLastConnection")) {
+	function UpdateLastConnection($user_name, $conn_vote, $table_name)
+	{
+		$query_update = sprintf("UPDATE `{$table_name}_users` SET `last_connection` = NOW() WHERE `user_name` = %s",
+								GetSQLValueString($user_name, "text"));
+		return mysql_query($query_update, $conn_vote) or die(mysql_error());
+	}
+}
 if (!function_exists("WriteRow")) {
 	function WriteRow($user_name, $round, $vote, $conn_vote, $table_name)
 	{
@@ -123,7 +153,7 @@ if (!function_exists("WriteRow")) {
 if (!function_exists("WriteRowUsers")) {
 	function WriteRowUsers($user_name, $conn_vote, $table_name)
 	{
-		$query_insert = sprintf("INSERT INTO `{$table_name}_users` (user_name, join_date) VALUES (%s, NOW())",
+		$query_insert = sprintf("INSERT INTO `{$table_name}_users` (user_name, join_date, last_connection) VALUES (%s, NOW(), NOW())",
 								GetSQLValueString($user_name, "text"));
 		return mysql_query($query_insert, $conn_vote) or die(mysql_error());
 	}
@@ -134,6 +164,7 @@ if (!function_exists("ReadRowsFromUserName")) {
 		$query_select = sprintf("SELECT * FROM `{$table_name}` WHERE `user_name` = %s",
 								GetSQLValueString($user_name, "text"));
 		$result = mysql_query($query_select, $conn_vote) or die(mysql_error());
+		$array = array();
 		while($row = mysql_fetch_assoc($result)){
 			$array[] = $row;
 		}
@@ -146,6 +177,7 @@ if (!function_exists("ReadRowsFromRound")) {
 		$query_select = sprintf("SELECT * FROM `{$table_name}` WHERE `round` = %s",
 							    GetSQLValueString($round, "int"));
 		$result = mysql_query($query_select, $conn_vote) or die(mysql_error());
+		$array = array();
 		while($row = mysql_fetch_assoc($result)){
 			$array[] = $row;
 		}
@@ -158,6 +190,7 @@ if (!function_exists("ReadRowsFromVote")) {
 		$query_select = sprintf("SELECT * FROM `{$table_name}` WHERE `vote` = %s",
 							    GetSQLValueString($vote, "int"));
 		$result = mysql_query($query_select, $conn_vote) or die(mysql_error());
+		$array = array();
 		while($row = mysql_fetch_assoc($result)){
 			$array[] = $row;
 		}
@@ -169,6 +202,7 @@ if (!function_exists("GetUsers")) {
 	{
 		$query_select = "SELECT `user_name` FROM `{$table_name}_users`";
 		$result = mysql_query($query_select, $conn_vote) or die(mysql_error());
+		$array = array();
 		while($row = mysql_fetch_assoc($result)){
 			$array[] = $row;
 		}
@@ -205,6 +239,28 @@ if (!function_exists("CreateSettings")) {
 	{
 		WriteRowUsers("Settings", $conn_vote, $table_name);
 		return WriteRow("Settings", 0, 0, $conn_vote, $table_name);
+	}
+}
+
+if (!function_exists("GetClientIP")) {
+	// careful, may be vulnerable
+	function GetClientIP() {
+		$ipaddress = '';
+		if (isset($_SERVER['HTTP_CLIENT_IP']))
+			$ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+		else if(isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+			$ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		else if(isset($_SERVER['HTTP_X_FORWARDED']))
+			$ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+		else if(isset($_SERVER['HTTP_FORWARDED_FOR']))
+			$ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+		else if(isset($_SERVER['HTTP_FORWARDED']))
+			$ipaddress = $_SERVER['HTTP_FORWARDED'];
+		else if(isset($_SERVER['REMOTE_ADDR']))
+			$ipaddress = $_SERVER['REMOTE_ADDR'];
+		else
+			$ipaddress = 'UNKNOWN';
+		return $ipaddress;
 	}
 }
 ?>

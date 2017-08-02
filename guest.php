@@ -45,6 +45,7 @@ if (isset($_POST["submit_vote"])) {
 			var current_state = "";
 			var choices = ["ONE (1)", "TWO (2)", "THREE (3)", "FIVE (5)", "EIGHT (8)", "THIRTEEN (13)", "TWENTY (20)", "COFFEE", "ENDLESS"];
 			var checkUsersInterval = window.setInterval(myCallback, 1000);
+			var refreshUserInterval = window.setInterval(refreshUserCallback, 15000);
 						
 			function stateMachine(state) {
 				switch(state) {
@@ -158,6 +159,29 @@ if (isset($_POST["submit_vote"])) {
 				xhttp.open("POST", "get_voting_state.php", true);
 				xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 				xhttp.send("table_name=<?php Print($table_name); ?>");
+			}
+
+			function refreshUserCallback() {
+				var xhttp;
+				if (window.XMLHttpRequest) {
+					// code for modern browsers
+					xhttp = new XMLHttpRequest();
+				} else {
+					// code for old IE browsers
+					xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						if (current_state != this.responseText) {
+							current_state = this.responseText;
+							console.log("Response", this.responseText);
+							console.log("User refreshed!");
+						}
+					}
+				};
+				xhttp.open("POST", "refresh_user.php", true);
+				xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				xhttp.send("table_name=<?php Print($table_name); ?>&user_name=<?php Print($user_name); ?>");
 			}
 			
 			function selectDivVisibility(state) {
