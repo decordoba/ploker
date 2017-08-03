@@ -8,19 +8,6 @@ if (!isset($_SESSION['room']) || !isset($_SESSION['user_name'])) {
 }
 $table_name = $_SESSION['room'];
 $user_name = $_SESSION['user_name'];
-
-if (isset($_POST["submit_vote"])) {
-    // read current round id
-    $round = GetGlobalRound($conn_vote, $table_name);
-    if (RowFromUserNameAndRoundExists($user_name, $round, $conn_vote, $table_name))
-    {
-		UpdateVote($user_name, $round, $_POST['vote'], $conn_vote, $table_name);
-	}
-	else
-	{
-		WriteRow($user_name, $round, $_POST['vote'], $conn_vote, $table_name);
-    }
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -44,7 +31,7 @@ if (isset($_POST["submit_vote"])) {
 		$(document).ready(function(){
 			var current_state = "";
 			var choices = ["ONE (1)", "TWO (2)", "THREE (3)", "FIVE (5)", "EIGHT (8)", "THIRTEEN (13)", "TWENTY (20)", "COFFEE", "ENDLESS"];
-			var checkUsersInterval = window.setInterval(myCallback, 1000);
+			var checkUsersInterval = window.setInterval(getVotingStateCallback, 1000);
 			var refreshUserInterval = window.setInterval(refreshUserCallback, 15000);
 						
 			function stateMachine(state) {
@@ -137,7 +124,7 @@ if (isset($_POST["submit_vote"])) {
 				chart.render();
 			}
 			
-			function myCallback() {
+			function getVotingStateCallback() {
 				var xhttp;
 				if (window.XMLHttpRequest) {
 					// code for modern browsers
@@ -150,7 +137,7 @@ if (isset($_POST["submit_vote"])) {
 					if (this.readyState == 4 && this.status == 200) {
 						if (current_state != this.responseText) {
 							current_state = this.responseText;
-							console.log("Response", this.responseText);
+							//console.log("Response", this.responseText);
 							selectDivVisibility(this.responseText);
 							stateMachine(this.responseText);
 						}
@@ -174,7 +161,7 @@ if (isset($_POST["submit_vote"])) {
 					if (this.readyState == 4 && this.status == 200) {
 						if (current_state != this.responseText) {
 							current_state = this.responseText;
-							console.log("Response", this.responseText);
+							//console.log("Response", this.responseText);
 							console.log("User refreshed!");
 						}
 					}
@@ -203,6 +190,27 @@ if (isset($_POST["submit_vote"])) {
 							document.getElementById("div_state_2").style.display = "none";
 				}
 			}
+			$("#form1").submit(function(e) {
+				e.preventDefault();
+				var xhttp;
+				var vote = $('input[name="vote"]:checked').val();
+				if (window.XMLHttpRequest) {
+					// code for modern browsers
+					xhttp = new XMLHttpRequest();
+				} else {
+					// code for old IE browsers
+					xhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				xhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						console.log("Response", this.responseText);
+						console.log("User voted", vote, "(", choices[vote], ")!");
+					}
+				};
+				xhttp.open("POST", "vote.php", true);
+				xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				xhttp.send("vote=" + vote + "&table_name=<?php Print($table_name); ?>&user_name=<?php Print($user_name); ?>");
+			});
 		});
 	</script>
 	<div id="div_state_0" style="display: none">

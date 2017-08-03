@@ -52,7 +52,7 @@ if (!isset($_SESSION['moderator_room'])) {
 				});
 			});
 			
-			var checkUsersInterval = window.setInterval(myCallback, 1000);
+			var checkUsersInterval = window.setInterval(getUsersCallback, 2000);
 			var checkAnswersInterval = window.setInterval(answersCallback, 1000);
 			
 			function stateMachine(state) {
@@ -179,7 +179,7 @@ if (!isset($_SESSION['moderator_room'])) {
 				chart.render();
 			}
 			
-			function myCallback() {
+			function getUsersCallback() {
 				var xhttp;
 				if (window.XMLHttpRequest) {
 					// code for modern browsers
@@ -210,7 +210,7 @@ if (!isset($_SESSION['moderator_room'])) {
 						connected_users = tmp_connected_users;
 						if (connected_users.length > 0) {
 							document.getElementById("participantlist").innerHTML = connected_users.join("");
-							console.log(connected_users.join(""));
+							//console.log(connected_users.join(""));
 						}
 						else {
 							document.getElementById("participantlist").innerHTML = "<button class='btn btn-info' type='button'>" + "Waiting for guests..." + "</button>";
@@ -228,6 +228,7 @@ if (!isset($_SESSION['moderator_room'])) {
 
 	<div  class="brightness" style="margin-top: 30px;" align=center><a href="./index.html"><img src="./logo.png" width="264" height="82" alt="" /></a></div>
 
+	<div class="row">
 	<div style="margin-top: 80px;" class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3" align="center">
 		<div class="btn-group btn-group-justified" role="group" aria-label="...">
 			<div class="btn-group" role="group">
@@ -260,7 +261,10 @@ if (!isset($_SESSION['moderator_room'])) {
 			<input class="button Startbutton" type="submit" name="stop" value="SHOW RESULTS" />
 		</div>
 	</div>
-	<div align=center id="barchart" style="display: none">
+	</div>
+	<div class="row">
+	<div align=center id="barchart" style="display: none" class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
 		<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+	</div>
 	</div>
 </body>
