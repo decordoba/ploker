@@ -2,8 +2,8 @@
 <?php require_once('basic_functions.php'); ?>
 <?php
 if (isset($_POST['table_name'])) {
-	$table_name = GetSQLValueString($_POST['table_name'], "int");
-	$user_name = GetSQLValueString($_POST['user_name'], "string");
-	UpdateLastConnection($user_name, $conn_vote, $table_name);
+	$table_name = $_POST['table_name'];
+	$user_name = $_POST['user_name'];
+	return UpdateLastConnection($user_name, $conn_vote, $table_name);
 }
 ?>

@@ -2,9 +2,9 @@
 <?php require_once('basic_functions.php'); ?>
 <?php
 if (isset($_POST['table_name'])) {
-	$table_name = GetSQLValueString($_POST['table_name'], "int");
-	$users = UpdateUsers($conn_vote, $table_name);
-	//$users = GetUsers($conn_vote, $table_name);
+	$table_name = $_POST['table_name'];
+	$users = UpdateUsers($conn_vote, $table_name);  // deletes users that expire
+	//$users = GetUsers($conn_vote, $table_name);  // users will never expire
 	echo json_encode($users);
 }
 ?>

@@ -2,7 +2,7 @@
 <?php require_once('basic_functions.php'); ?>
 <?php
 if (isset($_POST['table_name'])) {
-	$table_name = GetSQLValueString($_POST['table_name'], "int");
+	$table_name = $_POST['table_name'];
 	$state = GetGlobalState($conn_vote, $table_name);
 	echo $state;
 }
